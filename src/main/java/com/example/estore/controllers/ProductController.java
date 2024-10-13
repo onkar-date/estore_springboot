@@ -31,8 +31,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> addProduct(@ModelAttribute ProductRequestDTO productDTO,
-                                             @RequestParam("image") MultipartFile imageFile) throws IOException {
+    public ResponseEntity<String> addProduct(@ModelAttribute ProductRequestDTO productDTO) throws IOException {
 
         Product product = new Product();
         product.setName(productDTO.getName());
@@ -47,13 +46,16 @@ public class ProductController {
         User seller = userService.getUserById(productDTO.getSellerId()); // Get seller by ID
         product.setSeller(seller);
 
-        // Convert image to byte array
-        byte[] imageData = imageFile.getBytes();
-        product.setImage(imageData);
+        // Convert image to byte array if image is present
+        if (productDTO.getImage() != null && !productDTO.getImage().isEmpty()) {
+            byte[] imageData = productDTO.getImage().getBytes();
+            product.setImage(imageData);
+        }
 
         productService.saveProduct(product);
 
         return ResponseEntity.ok("Product added successfully");
     }
+
 
 }
