@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,11 +17,39 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    public ProductDTO getProductById(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return mapToProductDTO(product);
+        }
+        return null;
+    }
+
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
         // Convert Product entities to ProductDTOs
         return products.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private ProductDTO mapToProductDTO(Product product) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setName(product.getName());
+        productDTO.setDescription(product.getDescription());
+
+        // Convert price from paise to rupees
+        productDTO.setPrice(product.getPrice() / 100.0);
+
+        productDTO.setStockQuantity(product.getStockQuantity());
+        productDTO.setSellerId(product.getSeller().getId());
+
+        // Convert image byte array to Base64 string
+        String imageBase64 = Base64.getEncoder().encodeToString(product.getImage());
+        productDTO.setImage(imageBase64);
+
+        return productDTO;
     }
 
     private ProductDTO convertToDTO(Product product) {
