@@ -1,12 +1,13 @@
 package com.example.estore.controllers;
 
-import com.example.estore.entity.User;
+import com.example.estore.dto.AddUserRequest;
+import com.example.estore.dto.UserDTO;
+import com.example.estore.dto.UserLoginRequest;
 import com.example.estore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +19,26 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users); // Return 200 OK with the list of users
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> addUser(@RequestBody AddUserRequest userDto) {
+        UserDTO savedUser = userService.registerUser(userDto);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginRequest loginCredentials) {
+        UserDTO userDTO = userService.login(loginCredentials.getUsername(), loginCredentials.getPassword());
+
+        if (userDTO != null) {
+            return ResponseEntity.ok(userDTO);
+        }
+
+        // If login fails, return a 401 Unauthorized status
+        return ResponseEntity.status(401).body("Invalid credentials");
     }
 }
