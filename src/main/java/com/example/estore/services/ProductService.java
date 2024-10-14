@@ -21,7 +21,7 @@ public class ProductService {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            return mapToProductDTO(product);
+            return convertToDTO(product);
         }
         return null;
     }
@@ -33,31 +33,12 @@ public class ProductService {
         return products.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    private ProductDTO mapToProductDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setId(product.getId());
-        productDTO.setName(product.getName());
-        productDTO.setDescription(product.getDescription());
-
-        // Convert price from paise to rupees
-        productDTO.setPrice(product.getPrice() / 100.0);
-
-        productDTO.setStockQuantity(product.getStockQuantity());
-        productDTO.setSellerId(product.getSeller().getId());
-
-        // Convert image byte array to Base64 string
-        String imageBase64 = Base64.getEncoder().encodeToString(product.getImage());
-        productDTO.setImage(imageBase64);
-
-        return productDTO;
-    }
-
     private ProductDTO convertToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
-        productDTO.setPrice(product.getPrice() / 100.0); // Convert from paise to rupees
+        productDTO.setPrice(product.getPrice()); // Convert from paise to rupees
         productDTO.setStockQuantity(product.getStockQuantity());
         productDTO.setSellerId(product.getSeller().getId());
 

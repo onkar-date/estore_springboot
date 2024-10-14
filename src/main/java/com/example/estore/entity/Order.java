@@ -35,6 +35,6 @@ public class Order {
     private OrderStatus status; // Status of the order (e.g., PENDING, SHIPPED)
 
     @Column(name = "total_amount", nullable = false)
-    private double totalAmount; // Total amount for the order
+    private int totalAmount; // Total amount for the order
 }
 
