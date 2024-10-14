@@ -28,5 +28,5 @@ public class OrderItem {
     private int quantity; // Quantity of the product ordered
 
     @Column(nullable = false)
-    private double price; // Price of the product at the time of the order
+    private int price; // Price of the product at the time of the order
 }
