@@ -1,13 +1,16 @@
 package com.example.estore.dto;
 
+import com.example.estore.enums.UserType;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class AddUserRequest {
+    private Long id;
     private String username;
     private String password;
     private String email;
     private String firstName;
     private String lastName;
-    private boolean active = true; // Default value
+    private UserType role;
+    private boolean active = true;
 }
