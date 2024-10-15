@@ -11,10 +11,12 @@ import com.example.estore.entity.User;
 import com.example.estore.enums.OrderStatus;
 import com.example.estore.exceptions.ResourceNotFoundException;
 import com.example.estore.repositories.OrderRepository;
+import com.example.estore.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +32,16 @@ public class OrderService {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    public OrderDTO getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
+        return mapToOrderDTO(order);
+    }
 
     public OrderDTO createOrder(CreateOrderRequest orderRequest) {
         User user = userService.getUserById(orderRequest.getUserId());
@@ -84,10 +96,13 @@ public class OrderService {
         orderDTO.setUserId(order.getUser().getId());
         orderDTO.setOrderDate(order.getOrderDate());
         orderDTO.setStatus(order.getStatus());
-        orderDTO.setItems(order.getItems().stream() // Adjust to return DTOs
-                .map(this::convertToOrderItemDTO) // Ensure you have a method to convert to DTO
-                .collect(Collectors.toList()));
         orderDTO.setTotalAmount(order.getTotalAmount());
+
+        // Convert order items to OrderItemDTO with additional product details
+        orderDTO.setItems(order.getItems().stream()
+                .map(this::convertToOrderItemDTO)
+                .collect(Collectors.toList()));
+
         return orderDTO;
     }
 
@@ -95,6 +110,20 @@ public class OrderService {
         OrderItemDTO orderItemDTO = new OrderItemDTO();
         orderItemDTO.setProductId(orderItem.getProduct().getId());
         orderItemDTO.setQuantity(orderItem.getQuantity());
+
+        // Fetch the product details from the database using the product ID
+        Product product = productRepository.findById(orderItem.getProduct().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + orderItem.getProduct().getId()));
+
+        // Set the additional fields
+        orderItemDTO.setName(product.getName());
+        orderItemDTO.setPrice(product.getPrice());
+
+        if (product.getImage() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(product.getImage());
+            orderItemDTO.setImage(base64Image);
+        }
+
         return orderItemDTO;
     }
 }
