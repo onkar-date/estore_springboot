@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> addProduct(@ModelAttribute ProductRequestDTO productDTO) throws IOException {
+    public ResponseEntity<ProductDTO> addProduct(@ModelAttribute ProductRequestDTO productDTO) throws IOException {
 
         Product product = new Product();
         product.setName(productDTO.getName());
@@ -63,9 +63,9 @@ public class ProductController {
             product.setImage(imageData);
         }
 
-        productService.saveProduct(product);
+        ProductDTO addedProduct = productService.saveProduct(product);
 
-        return ResponseEntity.ok("Product added successfully");
+        return ResponseEntity.ok(addedProduct);
     }
 
 

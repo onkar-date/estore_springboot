@@ -51,7 +51,8 @@ public class ProductService {
         return productDTO;
     }
 
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
+    public ProductDTO saveProduct(Product product) {
+        Product addedProduct =  productRepository.save(product);
+        return convertToDTO(addedProduct);
     }
 }
