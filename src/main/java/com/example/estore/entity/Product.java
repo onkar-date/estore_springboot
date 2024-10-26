@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "products") // Specify table name
 @Data // Generates getters and setters
@@ -28,12 +30,11 @@ public class Product {
     @Column(name = "stock_quantity", nullable = false)
     private int stockQuantity; // Quantity available in stock
 
-    @Lob
-    @Column(nullable = true)
-    private byte[] image;  // To store the image as BLOB
-
     // Reference to the seller (User)
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false) // Foreign key to the User entity
     private User seller; // The seller of this product
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images;
 }

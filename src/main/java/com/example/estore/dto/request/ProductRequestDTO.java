@@ -1,4 +1,4 @@
-package com.example.estore.dto;
+package com.example.estore.dto.request;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +10,7 @@ public class ProductRequestDTO {
     private String description;
     private int price;
     private int stockQuantity;
-    private MultipartFile image;  // Multipart file for image
+    private MultipartFile image;
     private Long sellerId;
 }
 

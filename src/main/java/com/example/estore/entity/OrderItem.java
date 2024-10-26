@@ -1,15 +1,16 @@
 package com.example.estore.entity;
 
+import com.example.estore.enums.OrderItemStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "order_items") // Specify table name
-@Data // Generates getters and setters
-@NoArgsConstructor // Generates a no-args constructor
-@AllArgsConstructor // Generates a constructor with all fields
+@Table(name = "order_items")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
 
     @Id
@@ -17,16 +18,27 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false) // Foreign key to Order
-    private Order order; // The order this item belongs to
+    @JoinColumn(name = "sub_order_id", nullable = false)
+    private SubOrder subOrder;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false) // Foreign key to Product
-    private Product product; // The product being ordered
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @Column(nullable = false)
-    private int quantity; // Quantity of the product ordered
+    private int quantity;
 
     @Column(nullable = false)
-    private int price; // Price of the product at the time of the order
+    private int price;
+
+    @Column(name = "total_price", nullable = false)
+    private int totalPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderItemStatus status;
 }

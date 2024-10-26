@@ -1,15 +1,22 @@
 package com.example.estore.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
     private Long id;
     private String name;
     private String description;
-    private int price; // In paise
+    private int price;
     private int stockQuantity;
-    private Long sellerId; // The ID of the seller
-    private String image; // Base64 encoded image data
+    private Long sellerId;
+    private List<ImageDTO> images = new ArrayList<>();
 }
 

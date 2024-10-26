@@ -1,4 +1,4 @@
-package com.example.estore.dto;
+package com.example.estore.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuccessResponse {
+public class OrderItemRequestDTO {
 
-    private String message = "Success";
+    private Long productId;
+    private int quantity;
 }
+

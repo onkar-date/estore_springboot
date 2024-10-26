@@ -1,8 +1,7 @@
 package com.example.estore.services;
 
-import com.example.estore.dto.AddUserRequest;
+import com.example.estore.dto.request.AddUserRequest;
 import com.example.estore.dto.UserDTO;
-import com.example.estore.enums.UserType;
 import com.example.estore.entity.User;
 import com.example.estore.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
