@@ -29,6 +29,10 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @OneToOne
+    @JoinColumn(name = "image_id", nullable = false)
+    private Image image;
+
     @Column(nullable = false)
     private int quantity;
 
@@ -37,6 +41,12 @@ public class OrderItem {
 
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

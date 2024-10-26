@@ -67,6 +67,10 @@ public class ProductService {
         return productOptional.orElse(null);
     }
 
+    public Product updateProduct(Product product) {
+        return productRepository.save(product);
+    }
+
     private ProductDTO convertToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());

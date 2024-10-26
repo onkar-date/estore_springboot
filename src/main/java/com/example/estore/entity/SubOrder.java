@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,10 +29,10 @@ public class SubOrder {
     @Column(name = "total_amount", nullable = false)
     private int totalAmount;
 
-    @Column(name = "shipping_date", nullable = false)
+    @Column(name = "shipping_date")
     private Date shippingDate;
 
-    @Column(name = "delivery_date", nullable = false)
+    @Column(name = "delivery_date")
     private Date deliveryDate;
 
     @ManyToOne
@@ -43,5 +44,5 @@ public class SubOrder {
     private User seller;
 
     @OneToMany(mappedBy = "subOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
