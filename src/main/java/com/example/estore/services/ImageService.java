@@ -32,6 +32,10 @@ public class ImageService {
         return imageRepository.findByProductId(productId);
     }
 
+    public Image getPrimaryImageByProductId(Long productId) {
+        return imageRepository.findByProductIdAndIsPrimaryTrue(productId);
+    }
+
     public ImageDTO mapImageToDTO(Image image) {
         ImageDTO imageDTO = new ImageDTO();
 
@@ -42,5 +46,9 @@ public class ImageService {
         imageDTO.setIsPrimary(image.getIsPrimary());
 
         return imageDTO;
+    }
+
+    public String getBase64Image(byte[] image) {
+        return Base64.getEncoder().encodeToString(image);
     }
 }
