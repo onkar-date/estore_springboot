@@ -1,18 +1,16 @@
 package com.example.estore.dto;
 
-import lombok.AllArgsConstructor;
+import com.example.estore.enums.OrderItemStatus;
+import com.example.estore.enums.OrderStatus;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderItemDTO {
 
-    private Long productId;
     private String name;
-    private int quantity;
-    private int price;
+    private String description;
+    private String quantity;
+    private String price;
     private String image;
+    private OrderItemStatus status;
 }
-

@@ -1,8 +1,8 @@
 package com.example.estore.controllers;
 
-import com.example.estore.dto.AddUserRequest;
+import com.example.estore.dto.request.AddUserRequest;
 import com.example.estore.dto.UserDTO;
-import com.example.estore.dto.UserLoginRequest;
+import com.example.estore.dto.request.UserLoginRequest;
 import com.example.estore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

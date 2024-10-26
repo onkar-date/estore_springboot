@@ -1,4 +1,4 @@
-package com.example.estore.dto;
+package com.example.estore.dto.request;
 
 import lombok.Data;
 
@@ -8,5 +8,5 @@ import java.util.List;
 public class CreateOrderRequest {
 
     private Long userId;
-    private List<OrderItemDTO> items;
+    private List<OrderItemRequestDTO> items;
 }

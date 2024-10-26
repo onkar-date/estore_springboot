@@ -1,4 +1,4 @@
-package com.example.estore.dto;
+package com.example.estore.dto.request;
 
 import lombok.Data;
 

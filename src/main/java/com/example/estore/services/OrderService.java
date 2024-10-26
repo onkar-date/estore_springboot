@@ -1,9 +1,10 @@
 package com.example.estore.services;
 
-import com.example.estore.dto.CreateOrderRequest;
-import com.example.estore.dto.OrderDTO;
 import com.example.estore.dto.OrderItemDTO;
 import com.example.estore.dto.ProductDTO;
+import com.example.estore.dto.request.CreateOrderRequest;
+import com.example.estore.dto.response.OrderResponseDTO;
+import com.example.estore.dto.request.OrderItemRequestDTO;
 import com.example.estore.entity.Order;
 import com.example.estore.entity.OrderItem;
 import com.example.estore.entity.Product;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,93 +36,77 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
-    public OrderDTO getOrderById(Long orderId) {
+    public OrderResponseDTO getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
 
         return mapToOrderDTO(order);
     }
 
-    public OrderDTO createOrder(CreateOrderRequest orderRequest) {
+    public OrderResponseDTO createOrder(CreateOrderRequest orderRequest) {
         User user = userService.getUserById(orderRequest.getUserId());
         if (user == null) {
-            throw new ResourceNotFoundException("User not found"); // Throw exception if user not found
+            throw new ResourceNotFoundException("User not found");
         }
 
-        List<OrderItem> orderItems = new ArrayList<>();
         int totalAmount = 0;
 
-        for (OrderItemDTO itemDTO : orderRequest.getItems()) {
-            ProductDTO productDTO = productService.getProductById(itemDTO.getProductId());
-            if (productDTO == null) {
-                throw new ResourceNotFoundException("Product", "id", itemDTO.getProductId()); // Throw exception if product not found
-            }
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(new Product());
-            orderItem.getProduct().setId(productDTO.getId()); // Set product ID
-            orderItem.setQuantity(itemDTO.getQuantity());
-            orderItem.setPrice(productDTO.getPrice()); // Use price from ProductDTO
-
-            // Set the order reference to a temporary order object
-            orderItems.add(orderItem);
-            totalAmount += orderItem.getPrice() * orderItem.getQuantity(); // Calculate total amount
-        }
-
-        // Create a temporary Order object
         Order order = new Order();
         order.setUser(user);
+        order.setItems(this.createOrderItems(orderRequest.getItems(), order));
         order.setOrderDate(new Date());
         order.setStatus(OrderStatus.PENDING);
-        order.setTotalAmount(totalAmount);
+        order.setTotalAmount(calculateOrderTotalAmount());
 
-        // Now associate each OrderItem with the Order
-        for (OrderItem orderItem : orderItems) {
-            orderItem.setOrder(order); // Set the order reference
-        }
-
-        // Set the populated order items
-        order.setItems(orderItems);
-
-        // Save the order (this will also save order items due to cascade)
         Order createdOrder = orderRepository.save(order);
 
         return mapToOrderDTO(createdOrder);
     }
 
-    private OrderDTO mapToOrderDTO(Order order) {
-        OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setId(order.getId());
-        orderDTO.setUserId(order.getUser().getId());
-        orderDTO.setOrderDate(order.getOrderDate());
-        orderDTO.setStatus(order.getStatus());
-        orderDTO.setTotalAmount(order.getTotalAmount());
+    private List<OrderItem> createOrderItems(List<OrderItemRequestDTO> orderItemsToCreate, Order order) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (OrderItemRequestDTO item: orderItemsToCreate) {
+            Product product = productService.getProductById(item.getProductId());
+            if (product == null) {
+                throw new ResourceNotFoundException(String.format("Product not found, Id : %s", item.getProductId()));
+            }
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setProduct(product);
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPrice(product.getPrice());
+        }
+        return orderItems;
+    }
+
+    private int calculateOrderTotalAmount() {
+        return 0;
+    }
+
+    private OrderResponseDTO mapToOrderDTO(Order order) {
+        OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
+        orderResponseDTO.setId(order.getId());
+        orderResponseDTO.setUserId(order.getUser().getId());
+        orderResponseDTO.setOrderDate(order.getOrderDate());
+        orderResponseDTO.setStatus(order.getStatus());
+        orderResponseDTO.setTotalAmount(order.getTotalAmount());
 
         // Convert order items to OrderItemDTO with additional product details
-        orderDTO.setItems(order.getItems().stream()
+        orderResponseDTO.setItems(order.getItems().stream()
                 .map(this::convertToOrderItemDTO)
                 .collect(Collectors.toList()));
 
-        return orderDTO;
+        return orderResponseDTO;
     }
 
-    private OrderItemDTO convertToOrderItemDTO(OrderItem orderItem) {
-        OrderItemDTO orderItemDTO = new OrderItemDTO();
+    private OrderItemRequestDTO convertToOrderItemDTO(OrderItem orderItem) {
+        OrderItemRequestDTO orderItemDTO = new OrderItemRequestDTO();
         orderItemDTO.setProductId(orderItem.getProduct().getId());
         orderItemDTO.setQuantity(orderItem.getQuantity());
 
-        // Fetch the product details from the database using the product ID
         Product product = productRepository.findById(orderItem.getProduct().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + orderItem.getProduct().getId()));
 
-        // Set the additional fields
-        orderItemDTO.setName(product.getName());
-        orderItemDTO.setPrice(product.getPrice());
-
-        if (product.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(product.getImage());
-            orderItemDTO.setImage(base64Image);
-        }
 
         return orderItemDTO;
     }
