@@ -31,6 +31,12 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private Date orderDate; // Date when the order was placed
 
+    @Column(name = "completion_date")
+    private Date completionDate; // Date when the order was complete
+
+    @Column(name = "cancellation_date")
+    private Date cancellationDate; // Date when the order was cancelled
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status; // Status of the order (e.g., PENDING, SHIPPED)
