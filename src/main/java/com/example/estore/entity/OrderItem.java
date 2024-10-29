@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "order_items")
 @Data
@@ -18,16 +20,16 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sub_order_id", nullable = false)
-    private SubOrder subOrder;
-
-    @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id", nullable = false)
+    private User seller;
 
     @OneToOne
     @JoinColumn(name = "image_id", nullable = false)
@@ -47,6 +49,9 @@ public class OrderItem {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "delivery_date")
+    private Date deliveryDate; // Date when the order item was delivered
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

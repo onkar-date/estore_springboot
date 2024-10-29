@@ -50,7 +50,7 @@ public class ProductService {
 
         Product addedProduct =  productRepository.save(product);
 
-        imageService.saveImage(product, productToAdd.getImage(), false);
+        imageService.saveImage(product, productToAdd.getImage(), true);
         return convertToDTO(addedProduct);
     }
 

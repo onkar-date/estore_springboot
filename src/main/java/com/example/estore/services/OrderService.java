@@ -7,16 +7,15 @@ import com.example.estore.dto.request.OrderItemRequestDTO;
 import com.example.estore.entity.*;
 import com.example.estore.enums.OrderItemStatus;
 import com.example.estore.enums.OrderStatus;
-import com.example.estore.enums.SubOrderStatus;
 import com.example.estore.exceptions.InsufficientStockException;
 import com.example.estore.exceptions.ResourceNotFoundException;
 import com.example.estore.repositories.OrderRepository;
 import com.example.estore.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -29,9 +28,6 @@ public class OrderService {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private SubOrderService subOrderService;
 
     @Autowired
     private OrderItemService orderItemService;
@@ -49,6 +45,7 @@ public class OrderService {
         return mapToOrderDTO(order);
     }
 
+    @Transactional
     public OrderResponseDTO createOrder(CreateOrderRequest orderRequest) {
         User user = validateUser(orderRequest.getUserId());
 
@@ -94,14 +91,7 @@ public class OrderService {
 
         // Set the reference to the main order
         orderItem.setOrder(order); // Set the order reference
-
-        // Create a new sub-order for this item
-        SubOrder subOrder = createSubOrder(product, itemTotal, order);
-
-
-        // Now associate the order item with the saved sub-order
-        orderItem.setSubOrder(subOrder); // Set the sub-order reference
-
+        orderItem.setSeller(product.getSeller());
         // Save the order item
         OrderItem savedOrderItem = orderItemService.saveOrderItem(orderItem); // Save the order item
 
@@ -154,20 +144,6 @@ public class OrderService {
         }
 
         return orderItem;
-    }
-
-    private SubOrder createSubOrder(Product product, int itemTotal, Order order) {
-        SubOrder subOrder = new SubOrder();
-        subOrder.setStatus(SubOrderStatus.PENDING);
-        subOrder.setSeller(product.getSeller()); // Set the seller for the sub-order
-        subOrder.setTotalAmount(itemTotal); // Initialize total amount for sub-order
-        subOrder.setShippingDate(null); // Set shipping date if available
-        subOrder.setDeliveryDate(null); // Set delivery date if available
-
-        // Associate sub-order with the main order
-        subOrder.setOrder(order);
-
-        return subOrderService.saveSubOrder(subOrder);
     }
 
     private OrderResponseDTO mapToOrderDTO(Order order) {
