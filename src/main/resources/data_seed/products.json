@@ -1,0 +1,81 @@
+{
+  "products": [
+    {
+      "name": "Iphone 15",
+      "description": "Experience the iPhone 15 - your dynamic companion. Dynamic Island ensures you stay connected, bubbling up alerts seamlessly while you're busy. Its durable design features infused glass and aerospace-grade aluminum, making it dependable and resistant to water and dust. Capture life with precision using the 48 MP Main Camera, perfect for any shot. Powered by the A16 Bionic Processor, it excels in computational photography and more, all while conserving battery life. Plus, it's USB-C compatible, simplifying your charging needs. Elevate your tech game with the iPhone 15 - innovation at your fingertips. Goodbye cable clutter, hello convenience.",
+      "price": 7000000,
+      "stock_quantity": 50,
+      "seller_id": 2
+    },
+    {
+      "name": "REDMI 13C (Stardust Black, 128GB)",
+      "description": "\nStep into a world of extraordinary possibilities with the Redmi 13C - a smartphone that blends unmatched technology with creative brilliance. From capturing memories with artistic finesse to delivering immersive entertainment and powering through tasks effortlessly, this device is designed to complement your dynamic lifestyle. Redefine your smartphone experience with the Redmi 13C, where innovation meets imagination, and every feature is crafted to enhance your digital journey.",
+      "price": 719900,
+      "stock_quantity": 10,
+      "seller_id": 2
+    },
+    {
+      "name": "POCO M6 5G (Orion Blue, 64GB)",
+      "description": "Welcome to the future of smartphones - the POCO M6 5G, where innovation meets elegance, power, and speed. The POCO M6 5G is a statement of technological prowess, design excellence, and user-centric innovation. Embrace the future with a device that combines speed, storage, stunning visuals, and top-notch security. Elevate your mobile experience with the POCO M6 - where every feature is a testament to a new era in smartphone excellence.",
+      "price": 799900,
+      "stock_quantity": 10,
+      "seller_id": 3
+    },
+    {
+      "name": "CASIO Vintage A168WA",
+      "description": "Vintage A168WA-1WDF Black Dial Silver Stainless Steel Band Digital Watch - For Men & Women D131",
+      "price": 242900,
+      "stock_quantity": 100,
+      "seller_id": 3
+    },
+    {
+      "name": "LG 80.01 cm (31.5 inch)",
+      "description": "LG 80.01 cm (31.5 inch) Full HD IPS Panel with webOS, Apple AirPlay 2, HomeKit compatibility, 5Wx2 speakers, Magic remote compatible Smart Monitor (32SR50F-WA.ATREMSN)  (Response Time: 8 ms, 60 Hz Refresh Rate)",
+      "price": 1749900,
+      "stock_quantity": 100,
+      "seller_id": 3
+    },
+    {
+      "name": "MacBook Air (M2)",
+      "description": "MacBook Air with Apple M2 chip, 8GB RAM, and macOS Monterey. Thin and light design with a 13.6-inch Retina display and up to 18 hours of battery life.",
+      "price": 11990000,
+      "stock_quantity": 10,
+      "seller_id": 4
+    },
+    {
+      "name": "SAMSUNG Galaxy S24 Ultra 5G (Titanium Violet, 256 GB)  (12 GB RAM)",
+      "description": "Behold the Samsung Galaxy S24 Ultra smartphone, an exceptional amalgamation of incredible technology and superior sophistication. Whether you're typing up a storm or jotting something down, Note Assist makes a long story short. New AI-powered editing options let you get the photo you want, like relocating objects and intelligently filling in the space they left behind. With a durable shield of titanium built right into the frame and better scratch resistance with Corning Gorilla Armor, your IP68 water and dust-resistant Galaxy S24 Ultra is ready for adventure. Write, tap, and navigate with the precision your fingers wish they had on the new, flat display.",
+      "price": 12199900,
+      "stock_quantity": 50,
+      "seller_id": 4
+    },
+    {
+      "name": "Motorola Edge 50 Fusion (Marshmallow Blue, 256 GB)  (12 GB RAM)",
+      "description": "12 GB RAM | 256 GB ROM\r\n17.02 cm (6.7 inch) Full HD+ Display\r\n50MP + 13MP | 32MP Front Camera\r\n5000 mAh Battery\r\n7s Gen 2 Processor",
+      "price": 2399900,
+      "stock_quantity": 100,
+      "seller_id": 4
+    },
+    {
+      "name": "Whirlpool 184 L Direct Cool Single Door 2 Star Refrigerator",
+      "description": "184 L : Good for couples and small families\r\nNormal Compressor\r\n2 Star : For Energy savings up to 20%\r\nDirect Cool : Economical, consumes less electricity, requires manual defrosting",
+      "price": 1299900,
+      "stock_quantity": 450,
+      "seller_id": 5
+    },
+    {
+      "name": "AS-IT-IS Nutrition ATOM Whey Protein  (1 kg, Choco Hazel Fusion)",
+      "description": "Cross-Flow Microfiltered Whey Protein: Our Whey Protein is filtered using the cross-flow microfiltration technique, which is one of the best filtration methods for Whey Protein that utilizes a pressure drive separation mechanism.",
+      "price": 187900,
+      "stock_quantity": 32,
+      "seller_id": 5
+    },
+    {
+      "name": "SO Mass Analog Watch - For Men NH7987SL01CJ",
+      "description": "Whether it is a business meeting or an engagement party, this Sonata Analog Watch makes a perfect accessory for every look. Design Simplistically designed, this Sonata watch adds a tinge of timeless appeal to your look.",
+      "price": 8000,
+      "stock_quantity": 32,
+      "seller_id": 5
+    }
+  ]
+}
