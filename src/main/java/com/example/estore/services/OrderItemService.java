@@ -2,9 +2,14 @@ package com.example.estore.services;
 
 import com.example.estore.dto.OrderItemDTO;
 import com.example.estore.entity.OrderItem;
+import com.example.estore.enums.OrderItemStatus;
 import com.example.estore.repositories.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderItemService {
@@ -30,5 +35,12 @@ public class OrderItemService {
         orderItemDTO.setStatus(orderItem.getStatus());
 
         return orderItemDTO;
+    }
+
+    public List<OrderItemDTO> getOrderItemsByOrderId(Long orderId) {
+        return orderItemRepository.getOrderItemsByOrderId(orderId)
+                .stream()
+                .map(this::mapToOrderItemDTO)
+                .collect(Collectors.toList());
     }
 }

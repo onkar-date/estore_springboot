@@ -43,5 +43,16 @@ public class Order {
 
     @Column(name = "total_amount", nullable = false)
     private int totalAmount; // Total amount for the order
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderDate=" + orderDate +
+                ", status=" + status +
+                ", totalAmount=" + totalAmount +
+                '}';
+    }
+
 }
 
