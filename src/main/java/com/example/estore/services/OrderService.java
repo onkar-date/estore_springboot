@@ -38,11 +38,18 @@ public class OrderService {
     @Autowired
     private ImageService imageService;
 
-    public OrderResponseDTO getOrderById(Long orderId) {
+    public OrderResponseDTO getOrderDTOById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
 
         return mapToOrderDTO(order);
+    }
+
+    // This method returns the Order entity
+    public Order getOrderById(Long orderId) {
+
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
     }
 
     @Transactional
@@ -63,6 +70,14 @@ public class OrderService {
         Order updatedOrder = orderRepository.save(createdOrder); // Update the total amount in the main order
 
         return mapToOrderDTO(updatedOrder);
+    }
+
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public List<Long> findOrderIdsByStatus(OrderStatus orderStatus) {
+        return orderRepository.findOrderIdsByStatus(orderStatus);
     }
 
     private User validateUser(Long userId) {
