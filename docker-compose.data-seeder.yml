@@ -1,0 +1,18 @@
+services:
+  data-seeder:
+    image: python:3.9
+    container_name: data-seeder
+    working_dir: /app
+    volumes:
+      - ./src/main/resources/data_seed:/app/data_seed
+      - ./requirements.txt:/app/requirements.txt
+    command: sh -c "pip install -r /app/requirements.txt && python data_seed/loadData.py"
+    environment:
+      PYTHONUNBUFFERED: "1"
+#    depends_on:
+#      - db
+
+networks:
+  default:
+    external:
+      name: estore_springboot_default
