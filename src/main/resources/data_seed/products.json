@@ -76,6 +76,13 @@
       "price": 8000,
       "stock_quantity": 32,
       "seller_id": 5
+    },
+    {
+      "name": "Sapiens - A Brief History of Humankind",
+      "description": "**THE MULTI-MILLION COPY BESTSELLER**\\r\\n'Interesting and provocative... It gives you a sense of how briefly we've been on this Earth' Barack Obama\\r\\n\\r\\nWhat makes us brilliant? What makes us deadly? What makes us Sapiens?",
+      "price": 436,
+      "stock_quantity": 200,
+      "seller_id": 2
     }
   ]
 }

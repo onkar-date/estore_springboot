@@ -2,16 +2,24 @@ package com.example.estore.services;
 
 import com.example.estore.dto.request.AddUserRequest;
 import com.example.estore.dto.UserDTO;
+import com.example.estore.dto.response.AuthenticationResponse;
 import com.example.estore.entity.User;
 import com.example.estore.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -28,6 +36,25 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
         return mapToDTO(savedUser);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities(user));
+    }
+
+    public User validateUser(String username, String password) {
+        User user = findByUsername(username);
+
+        if (user != null && checkPassword(user, password)) {
+            return user;
+        }
+
+        return null;
     }
 
     public UserDTO login(String username, String password) {
@@ -68,4 +95,22 @@ public class UserService {
         userDTO.setActive(user.isActive());
         return userDTO;
     }
+
+    public AuthenticationResponse mapToAuthenticationResponse(String token, User user) {
+        return new AuthenticationResponse(
+                token,
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRole(),
+                user.isActive()
+        );
+    }
+
+
+     private Collection<GrantedAuthority> getAuthorities(User user) {
+         return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+     }
 }
