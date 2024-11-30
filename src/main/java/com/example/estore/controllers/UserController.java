@@ -24,12 +24,6 @@ public class UserController {
         return ResponseEntity.ok(users); // Return 200 OK with the list of users
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserDTO> addUser(@RequestBody AddUserRequest userDto) {
-        UserDTO savedUser = userService.registerUser(userDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequest loginCredentials) {
         UserDTO userDTO = userService.login(loginCredentials.getUsername(), loginCredentials.getPassword());
