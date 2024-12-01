@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -24,5 +26,11 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody CreateOrderRequest orderRequest) {
         OrderResponseDTO createdOrder = orderService.createOrder(orderRequest);
         return ResponseEntity.ok(createdOrder);
+    }
+
+    @GetMapping("/user-orders/{customerId}")
+    public ResponseEntity<List<OrderResponseDTO>> getCustomerOrders(@PathVariable Long customerId) {
+        List<OrderResponseDTO> orderResponseDTO = orderService.getCustomerOrders(customerId);
+        return ResponseEntity.ok(orderResponseDTO);
     }
 }

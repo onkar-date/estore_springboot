@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -50,6 +51,12 @@ public class OrderService {
 
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+    }
+
+    public List<OrderResponseDTO> getCustomerOrders(Long customerId) {
+        User customer = userService.getUserById(customerId);
+        List<Order> customerOrders = orderRepository.findOrderByUser(customer);
+        return customerOrders.stream().map(this::mapToOrderDTO).collect(Collectors.toList());
     }
 
     @Transactional
@@ -179,17 +186,5 @@ public class OrderService {
         orderResponseDTO.setItems(orderItemDTOS);
 
         return orderResponseDTO;
-    }
-
-    private OrderItemRequestDTO convertToOrderItemDTO(OrderItem orderItem) {
-        OrderItemRequestDTO orderItemDTO = new OrderItemRequestDTO();
-        orderItemDTO.setProductId(orderItem.getProduct().getId());
-        orderItemDTO.setQuantity(orderItem.getQuantity());
-
-        Product product = productRepository.findById(orderItem.getProduct().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + orderItem.getProduct().getId()));
-
-
-        return orderItemDTO;
     }
 }
