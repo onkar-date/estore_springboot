@@ -1,7 +1,9 @@
 package com.example.estore.controllers;
 
+import com.example.estore.dto.OrderItemDTO;
 import com.example.estore.dto.request.CreateOrderRequest;
 import com.example.estore.dto.response.OrderResponseDTO;
+import com.example.estore.services.OrderItemService;
 import com.example.estore.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderItemService orderItemService;
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long id) {
@@ -32,5 +37,11 @@ public class OrderController {
     public ResponseEntity<List<OrderResponseDTO>> getCustomerOrders(@PathVariable Long customerId) {
         List<OrderResponseDTO> orderResponseDTO = orderService.getCustomerOrders(customerId);
         return ResponseEntity.ok(orderResponseDTO);
+    }
+
+    @GetMapping("/seller-orders/{sellerId}")
+    public ResponseEntity<List<OrderItemDTO>> getSellerOrders(@PathVariable Long sellerId1) {
+        List<OrderItemDTO> orderItems = orderItemService.getSellerOrders(sellerId1);
+        return ResponseEntity.ok(orderItems);
     }
 }
