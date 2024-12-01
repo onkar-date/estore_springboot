@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .csrf(AbstractHttpConfigurer::disable) // Explicitly disable CSRF protection
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Allow access to authentication endpoints
+                        .requestMatchers("/api/auth/**", "/error").permitAll() // Allow access to authentication endpoints
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session

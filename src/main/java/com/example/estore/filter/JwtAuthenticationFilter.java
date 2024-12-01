@@ -33,27 +33,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain chain
-    )
-            throws ServletException, IOException {
+    ) throws ServletException, IOException {
 
         final String header = request.getHeader("Authorization");
-        String jwtToken = null;
+        String jwtToken;
         String username = null;
 
+        // Check for JWT in Authorization header
         if (header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
 
-        jwtToken = header.substring(7);
+        jwtToken = header.substring(7); // Extract token after "Bearer "
         try {
+            // Extract username from token
             username = jwtUtil.getUsernameFromToken(jwtToken);
         } catch (ExpiredJwtException e) {
-            System.out.println("JWT token has expired");
+            // Respond with appropriate error if token is expired
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("JWT token has expired");
+            return;
         } catch (Exception e) {
-            System.out.println("Error parsing JWT token");
+            // Handle other parsing exceptions
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid JWT token");
+            return;
         }
 
+        // Validate token and set security context
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = this.userService.loadUserByUsername(username);
 
@@ -65,9 +73,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                // If token is invalid
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("JWT token is invalid");
+                return;
             }
         }
 
-        chain.doFilter(request, response);
+        chain.doFilter(request, response); // Continue the filter chain
     }
+
 }
