@@ -26,7 +26,7 @@ public class OrderItemService {
 
     public OrderItemDTO mapToOrderItemDTO(OrderItem orderItem) {
         OrderItemDTO orderItemDTO = new OrderItemDTO();
-
+        orderItemDTO.setId(orderItem.getId());
         orderItemDTO.setDescription(orderItem.getProduct().getDescription());
         orderItemDTO.setName(orderItem.getProduct().getName());
         orderItemDTO.setQuantity(orderItem.getQuantity());
