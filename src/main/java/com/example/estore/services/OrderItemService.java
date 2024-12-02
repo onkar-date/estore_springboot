@@ -33,7 +33,7 @@ public class OrderItemService {
         if (!UserType.SELLER.equals(user.getRole())) {
             throw new AuthorizationDeniedException("User is not a seller !!");
         }
-        List<OrderItem> sellerOrderItems = orderItemRepository.findBySeller(user);
+        List<OrderItem> sellerOrderItems = orderItemRepository.findBySellerId(sellerId);
         return sellerOrderItems.stream().map(this::mapToOrderItemDTO).collect(Collectors.toList());
     }
 
