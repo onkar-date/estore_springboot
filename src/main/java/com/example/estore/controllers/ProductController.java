@@ -2,17 +2,18 @@ package com.example.estore.controllers;
 
 import com.example.estore.dto.ProductDTO;
 import com.example.estore.dto.request.ProductRequestDTO;
-import com.example.estore.entity.Product;
-import com.example.estore.entity.User;
+import com.example.estore.dto.response.PaginatedResponse;
 import com.example.estore.services.ProductService;
 import com.example.estore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -25,9 +26,19 @@ public class ProductController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<ProductDTO> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
+    public ResponseEntity<PaginatedResponse<ProductDTO>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductDTO> productPage = productService.getAllProducts(pageable);
+        PaginatedResponse<ProductDTO> paginatedResponse = new PaginatedResponse<>(
+                productPage.getContent(),
+                productPage.getNumber(),
+                productPage.getTotalPages(),
+                productPage.getTotalElements()
+        );
+        return ResponseEntity.ok(paginatedResponse);
     }
 
     @GetMapping("/{id}")
