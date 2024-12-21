@@ -8,6 +8,8 @@ import com.example.estore.entity.Product;
 import com.example.estore.entity.User;
 import com.example.estore.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,11 +30,8 @@ public class ProductService {
     @Autowired
     private ImageService imageService;
 
-    public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-
-        // Convert Product entities to ProductDTOs
-        return products.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public Page <ProductDTO> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).map(this::convertToDTO);
     }
 
     public ProductDTO saveProduct(ProductRequestDTO productToAdd) throws IOException {
