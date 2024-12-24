@@ -7,9 +7,11 @@ import com.example.estore.entity.Image;
 import com.example.estore.entity.Product;
 import com.example.estore.entity.User;
 import com.example.estore.repositories.ProductRepository;
+import com.example.estore.specifications.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,8 +32,12 @@ public class ProductService {
     @Autowired
     private ImageService imageService;
 
-    public Page <ProductDTO> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).map(this::convertToDTO);
+    public Page <ProductDTO> getAllProducts(Pageable pageable, String searchKey) {
+        Specification<Product> spec = Specification.where(null);
+        if (searchKey != null && !searchKey.isEmpty()) {
+            spec = spec.and(ProductSpecifications.nameContains(searchKey));
+        }
+        return productRepository.findAll(spec, pageable).map(this::convertToDTO);
     }
 
     public ProductDTO saveProduct(ProductRequestDTO productToAdd) throws IOException {
