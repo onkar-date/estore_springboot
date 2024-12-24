@@ -28,10 +28,11 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<PaginatedResponse<ProductDTO>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String searchKey
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductDTO> productPage = productService.getAllProducts(pageable);
+        Page<ProductDTO> productPage = productService.getAllProducts(pageable, searchKey);
         PaginatedResponse<ProductDTO> paginatedResponse = new PaginatedResponse<>(
                 productPage.getContent(),
                 productPage.getNumber(),
